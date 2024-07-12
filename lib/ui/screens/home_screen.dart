@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:yodev_test/ui/screens/add_todo_screen.dart';
+import 'package:yodev_test/ui/widgets/globals/buttons/floating_button.dart';
+import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
+import 'package:yodev_test/ui/widgets/todo/todo_list.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -7,10 +11,29 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Todo App'),
+        title: const Text('Lista de tareas'),
+        centerTitle: false,
       ),
-      body: const Center(
-        child: Text('Home Screen'),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            children: [
+              YDTextField(
+                borderRadius: BorderRadius.circular(50),
+                label: 'Buscar tarea...',
+                suffixIcon: const Icon(Icons.search),
+              ),
+              const SizedBox(height: 10),
+              const TodoList(),
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: YDFloatingButton(
+        onPressed: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => const AddTodoScreen()),
+        ),
       ),
     );
   }
