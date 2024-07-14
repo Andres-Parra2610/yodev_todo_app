@@ -11,7 +11,7 @@ class TodoInitial extends TodoState {}
 
 class TodosLoading extends TodoState {}
 
-class TodoAddLoading extends TodoState {}
+class TodoSubmitLoading extends TodoState {}
 
 class TodosLoaded extends TodoState {
   final List<Todo> todos;

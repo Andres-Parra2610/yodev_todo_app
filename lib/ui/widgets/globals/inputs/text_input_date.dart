@@ -3,25 +3,28 @@ import 'package:intl/intl.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 
 class YDTextInputDate extends StatelessWidget {
-  YDTextInputDate(
-      {super.key,
-      this.validate,
-      this.initValue = '',
-      this.label,
-      this.onChanged});
+  YDTextInputDate({
+    super.key,
+    this.validate,
+    this.label,
+    this.onChanged,
+    this.initValue,
+  }) {
+    if (initValue != null) {
+      _dateController.text = DateFormat('dd/MM/yyyy').format(initValue!);
+    }
+  }
 
   final Function? validate;
-  final String? initValue;
   final String? label;
   final void Function(DateTime?)? onChanged;
+  final DateTime? initValue;
 
   @protected
   final TextEditingController _dateController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    _dateController.text = initValue ?? '';
-
     return YDTextField(
         label: label,
         controller: _dateController,

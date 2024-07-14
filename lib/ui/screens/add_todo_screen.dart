@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:yodev_test/ui/widgets/todo/todo_register.dart';
+import 'package:yodev_test/domain/models/todo.dart';
+import 'package:yodev_test/ui/widgets/todo/todo_form.dart';
 
 class AddTodoScreen extends StatelessWidget {
-  const AddTodoScreen({super.key});
+  const AddTodoScreen({super.key, this.todo});
+
+  final Todo? todo;
 
   @override
   Widget build(BuildContext context) {
@@ -14,10 +17,12 @@ class AddTodoScreen extends StatelessWidget {
         elevation: 0,
         centerTitle: false,
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
           child: Padding(
-        padding: EdgeInsets.all(15),
-        child: TodoRegisterForm(),
+        padding: const EdgeInsets.all(15),
+        child: TodoForm(
+          todo: todo,
+        ),
       )),
     );
   }

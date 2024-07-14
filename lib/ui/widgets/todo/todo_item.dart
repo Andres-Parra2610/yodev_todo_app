@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
 import 'package:yodev_test/core/enums.dart';
 import 'package:yodev_test/domain/models/todo.dart';
+import 'package:yodev_test/ui/screens/add_todo_screen.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem({super.key, required this.todo});
@@ -19,7 +20,11 @@ class TodoItem extends StatelessWidget {
         onSelected: (TodoPopUpEnum result) {
           switch (result) {
             case TodoPopUpEnum.edit:
-              // Código para editar
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => AddTodoScreen(todo: todo),
+                ),
+              );
               break;
             case TodoPopUpEnum.delete:
               // Código para eliminar

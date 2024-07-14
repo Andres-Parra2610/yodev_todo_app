@@ -7,16 +7,19 @@ import 'package:yodev_test/ui/widgets/globals/inputs/input_dropdown.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_input_date.dart';
 
-class TodoRegisterForm extends StatefulWidget {
-  const TodoRegisterForm({
+class TodoForm extends StatefulWidget {
+  const TodoForm({
     super.key,
+    this.todo,
   });
 
+  final Todo? todo;
+
   @override
-  State<TodoRegisterForm> createState() => _TodoRegisterFormState();
+  State<TodoForm> createState() => _TodoFormState();
 }
 
-class _TodoRegisterFormState extends State<TodoRegisterForm> {
+class _TodoFormState extends State<TodoForm> {
   // Cpntrollers
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
@@ -26,16 +29,37 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
   TodoPriorityEnum? _priority;
   DateTime? _dateTime;
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.todo == null) return;
+    _priority = widget.todo?.priority;
+    _dateTime = widget.todo?.estimatedDate;
+    _titleController.text = widget.todo?.title ?? '';
+    _descriptionController.text = widget.todo?.description ?? '';
+  }
+
   // On submit method
   void _onSubmit() {
     if (!_formKey.currentState!.validate()) return;
-    final todo = Todo(
-      title: _titleController.text,
-      priority: _priority!,
-      estimatedDate: _dateTime,
-      description: _descriptionController.text,
-    );
-    context.read<TodoBloc>().add(AddTodo(todo));
+
+    if (widget.todo == null) {
+      final todo = Todo(
+        title: _titleController.text,
+        priority: _priority!,
+        estimatedDate: _dateTime,
+        description: _descriptionController.text,
+      );
+      context.read<TodoBloc>().add(AddTodo(todo));
+    } else {
+      final todo = widget.todo!.copyWith(
+        title: _titleController.text,
+        priority: _priority!,
+        estimatedDate: _dateTime,
+        description: _descriptionController.text,
+      );
+      context.read<TodoBloc>().add(UpdateTodo(todo));
+    }
   }
 
   @override
@@ -53,6 +77,7 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
           const SizedBox(height: 20),
           YDInputDropdown<TodoPriorityEnum>(
             label: 'Prioridad',
+            value: _priority,
             required: true,
             items: TodoPriorityEnum.values
                 .map(
@@ -67,6 +92,7 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
           ),
           const SizedBox(height: 20),
           YDTextInputDate(
+            initValue: _dateTime,
             label: 'Fecha estimada de finalización',
             onChanged: (value) => _dateTime = value,
           ),
@@ -84,12 +110,14 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
               }
             },
             builder: (context, state) {
-              if (state is TodoAddLoading) {
+              if (state is TodoSubmitLoading) {
                 return const CircularProgressIndicator();
               }
               return ElevatedButton(
                 onPressed: _onSubmit,
-                child: const Text('Añadir'),
+                child: widget.todo == null
+                    ? const Text('Añadir')
+                    : const Text('Editar'),
               );
             },
           ),

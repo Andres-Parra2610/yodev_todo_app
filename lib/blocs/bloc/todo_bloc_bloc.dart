@@ -39,7 +39,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     final currentState = state;
-    emit(TodoAddLoading());
+    emit(TodoSubmitLoading());
     if (currentState is TodosLoaded) {
       final allTodos = List<Todo>.from(currentState.todos);
       try {
@@ -59,6 +59,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     final currentState = state;
+    emit(TodoSubmitLoading());
     if (currentState is TodosLoaded) {
       List<Todo> allTodos = List<Todo>.from(currentState.todos);
       try {
