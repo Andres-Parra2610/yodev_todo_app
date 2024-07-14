@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 import 'package:yodev_test/core/enums.dart';
 
 class Todo {
@@ -8,6 +9,10 @@ class Todo {
   final String? description;
   final DateTime? estimatedDate;
   final bool isDone;
+
+  String? get dateString => estimatedDate != null
+      ? DateFormat('d \'de\' MMMM \'de\' y', 'es_ES').format(estimatedDate!)
+      : null;
 
   const Todo({
     required this.title,
@@ -50,12 +55,17 @@ class Todo {
     bool? isDone,
   }) {
     return Todo(
-      id: id,
+      id: id ?? this.id,
       title: title ?? this.title,
       priority: priority ?? this.priority,
       description: description ?? this.description,
       estimatedDate: estimatedDate ?? this.estimatedDate,
       isDone: isDone ?? this.isDone,
     );
+  }
+
+  @override
+  String toString() {
+    return 'Todo{id: $id, title: $title, priority: $priority, description: $description, estimatedDate: $estimatedDate, isDone: $isDone}';
   }
 }

@@ -32,8 +32,8 @@ class FirebaseTodoRepository implements ITodoRepository {
       return _db.collection('todos').get().then((event) {
         final todos = <Todo>[];
         for (var doc in event.docs) {
-          final todo = Todo.fromJson(doc.data());
-          todo.copyWith(id: doc.id);
+          Todo todo = Todo.fromJson(doc.data());
+          todo = todo.copyWith(id: doc.id);
           todos.add(todo);
         }
         return todos;
@@ -46,7 +46,7 @@ class FirebaseTodoRepository implements ITodoRepository {
   @override
   Future<void> updateTodo(Todo todo) async {
     try {
-      _db.collection('todos').doc(todo.id).update(todo.toJson());
+      await _db.collection('todos').doc(todo.id).update(todo.toJson());
     } catch (e) {
       throw Exception('Error actualizando la tarea, inténtalo de nuevo');
     }

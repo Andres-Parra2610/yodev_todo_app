@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:yodev_test/core/enums.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 
 class TodoItem extends StatelessWidget {
@@ -11,9 +12,10 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: Text(todo.title),
-      subtitle: Text('Prioridad: ${todo.priority.displayName}'),
-      checkColor:
-          true ? Theme.of(context).colorScheme.onSurface : Colors.transparent,
+      subtitle: Text(todo.dateString ?? 'Sin fecha'),
+      checkColor: todo.isDone
+          ? Theme.of(context).colorScheme.onSurface
+          : Colors.transparent,
       side: WidgetStateBorderSide.resolveWith(
         (states) => const BorderSide(
           color: Colors.blue,
@@ -21,14 +23,19 @@ class TodoItem extends StatelessWidget {
           width: .8,
         ),
       ),
-      value: true,
+      value: todo.isDone,
       fillColor: WidgetStateColor.resolveWith(
         (states) => Colors.transparent,
       ),
       controlAffinity: ListTileControlAffinity.leading,
       checkboxShape: const CircleBorder(),
       contentPadding: EdgeInsets.zero,
-      onChanged: (bool? value) {},
+      onChanged: (bool? value) {
+        if (value == null) return;
+        context
+            .read<TodoBloc>()
+            .add(UpdateTodo(todo.copyWith(isDone: value), isToggle: true));
+      },
     );
   }
 }

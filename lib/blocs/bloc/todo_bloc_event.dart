@@ -20,8 +20,9 @@ class AddTodo extends TodoEvent {
 
 class UpdateTodo extends TodoEvent {
   final Todo todo;
+  final bool? isToggle;
 
-  const UpdateTodo(this.todo);
+  const UpdateTodo(this.todo, {this.isToggle = false});
 
   @override
   List<Object> get props => [todo];

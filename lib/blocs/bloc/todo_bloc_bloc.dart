@@ -14,6 +14,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         super(TodoInitial()) {
     on<LoadTodos>(_onLoadTodos);
     on<AddTodo>(_onAddTodo);
+    on<UpdateTodo>(_onUpdateTodo);
   }
 
   Future<void> _onLoadTodos(
@@ -49,6 +50,29 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         emit(TodosError(e.toString()));
         emit(TodosLoaded(allTodos));
         return;
+      }
+    }
+  }
+
+  Future<void> _onUpdateTodo(
+    UpdateTodo event,
+    Emitter<TodoState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is TodosLoaded) {
+      List<Todo> allTodos = List<Todo>.from(currentState.todos);
+      try {
+        await _todoRepository.updateTodo(event.todo);
+        if (!event.isToggle!) {
+          emit(const TodoSucces('Tarea actualizada con éxito'));
+        }
+        allTodos = allTodos
+            .map((todo) => todo.id == event.todo.id ? event.todo : todo)
+            .toList();
+        emit(TodosLoaded(allTodos));
+      } catch (e) {
+        emit(TodosError(e.toString()));
+        emit(TodosLoaded(allTodos));
       }
     }
   }
