@@ -1,6 +1,6 @@
 class Todo {
   final String id;
-  final String name;
+  final String title;
   final int priority;
   final String? description;
   final DateTime? estimatedDate;
@@ -8,7 +8,7 @@ class Todo {
 
   const Todo({
     required this.id,
-    required this.name,
+    required this.title,
     required this.priority,
     this.description,
     this.estimatedDate,
@@ -24,7 +24,7 @@ class Todo {
   }) {
     return Todo(
       id: id,
-      name: name ?? this.name,
+      title: name ?? this.title,
       priority: priority ?? this.priority,
       description: description ?? this.description,
       estimatedDate: estimatedDate ?? this.estimatedDate,

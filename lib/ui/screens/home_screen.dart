@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
+import 'package:yodev_test/domain/models/todo.dart';
 import 'package:yodev_test/ui/screens/add_todo_screen.dart';
 import 'package:yodev_test/ui/widgets/globals/buttons/floating_button.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
@@ -31,9 +34,11 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
       floatingActionButton: YDFloatingButton(
-        onPressed: () => Navigator.of(context).push(
+        /* onPressed: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => const AddTodoScreen()),
-        ),
+        ), */
+        onPressed: () => context.read<TodoBloc>().add(
+            const AddTodo(Todo(id: '34', title: 'Nuevo titulo', priority: 1))),
       ),
     );
   }

@@ -7,7 +7,7 @@ sealed class TodoState extends Equatable {
   List<Object> get props => [];
 }
 
-class TodoBlocInitial extends TodoState {}
+class TodoInitial extends TodoState {}
 
 class TodosLoading extends TodoState {}
 

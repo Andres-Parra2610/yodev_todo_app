@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:yodev_test/domain/models/todo.dart';
 
 class TodoItem extends StatelessWidget {
-  const TodoItem({super.key});
+  const TodoItem({super.key, required this.todo});
+
+  final Todo todo;
 
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: const Text('Esta es una tarea pendiente'),
-      subtitle: const Text('Prioridad: baja'),
+      title: Text(todo.title),
+      subtitle: Text('Prioridad: ${todo.priority}'),
       checkColor:
           true ? Theme.of(context).colorScheme.onSurface : Colors.transparent,
       side: WidgetStateBorderSide.resolveWith(

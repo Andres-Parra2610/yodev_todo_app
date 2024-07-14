@@ -5,9 +5,10 @@ import 'package:yodev_test/domain/models/todo.dart';
 part 'todo_bloc_event.dart';
 part 'todo_bloc_state.dart';
 
-class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBlocBloc() : super(TodoBlocInitial()) {
+class TodoBloc extends Bloc<TodoEvent, TodoState> {
+  TodoBloc() : super(TodoInitial()) {
     on<LoadTodos>(_onLoadTodos);
+    on<AddTodo>(_onAddTodo);
   }
 
   Future<void> _onLoadTodos(
@@ -19,7 +20,7 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
     final todos = [
       Todo(
         id: '1',
-        name: 'Tarea 1',
+        title: 'Tarea 1',
         priority: 1,
         description: 'Descripción de la tarea 1',
         estimatedDate: DateTime.now().add(const Duration(days: 1)),
@@ -27,7 +28,7 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
       ),
       Todo(
         id: '2',
-        name: 'Tarea 2',
+        title: 'Tarea 2',
         priority: 2,
         description: 'Descripción de la tarea 2',
         estimatedDate: DateTime.now().add(const Duration(days: 2)),
@@ -35,7 +36,7 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
       ),
       Todo(
         id: '3',
-        name: 'Tarea 3',
+        title: 'Tarea 3',
         priority: 3,
         description: 'Descripción de la tarea 3',
         estimatedDate: DateTime.now().add(const Duration(days: 3)),
@@ -43,7 +44,7 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
       ),
       Todo(
         id: '4',
-        name: 'Tarea 4',
+        title: 'Tarea 4',
         priority: 1,
         description: 'Descripción de la tarea 4',
         estimatedDate: DateTime.now().add(const Duration(days: 4)),
@@ -51,7 +52,7 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
       ),
       Todo(
         id: '5',
-        name: 'Tarea 5',
+        title: 'Tarea 5',
         priority: 2,
         description: 'Descripción de la tarea 5',
         estimatedDate: DateTime.now().add(const Duration(days: 5)),
@@ -60,5 +61,29 @@ class TodoBlocBloc extends Bloc<TodoEvent, TodoState> {
     ];
 
     emit(TodosLoaded(todos));
+  }
+
+  Future<void> _onAddTodo(
+    AddTodo event,
+    Emitter<TodoState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is TodosLoaded) {
+      final updatedTodos = List<Todo>.from(currentState.todos)
+        ..add(
+          Todo(
+            id: '6',
+            title: 'Nueva tarea',
+            priority: 1,
+            description: 'Descripción de la tarea',
+            estimatedDate: DateTime.now().add(const Duration(days: 6)),
+            isDone: false,
+          ),
+        );
+
+      emit(TodosLoaded(updatedTodos));
+    } else {
+      emit(const TodosError('Error adding todo'));
+    }
   }
 }
