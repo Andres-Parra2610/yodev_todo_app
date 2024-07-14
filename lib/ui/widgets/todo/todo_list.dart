@@ -34,6 +34,10 @@ class TodoList extends StatelessWidget {
 
         if (state is TodosLoaded) {
           final todos = state.todos;
+
+          if (todos.isEmpty)
+            return const Center(child: Text('No hay tareas registradas'));
+
           return ListView.builder(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,

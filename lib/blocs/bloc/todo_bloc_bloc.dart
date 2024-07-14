@@ -15,6 +15,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<LoadTodos>(_onLoadTodos);
     on<AddTodo>(_onAddTodo);
     on<UpdateTodo>(_onUpdateTodo);
+    on<DeleteTodo>(_onDeleteTodo);
   }
 
   Future<void> _onLoadTodos(
@@ -70,6 +71,26 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         allTodos = allTodos
             .map((todo) => todo.id == event.todo.id ? event.todo : todo)
             .toList();
+        emit(TodosLoaded(allTodos));
+      } catch (e) {
+        emit(TodosError(e.toString()));
+        emit(TodosLoaded(allTodos));
+      }
+    }
+  }
+
+  Future<void> _onDeleteTodo(
+    DeleteTodo event,
+    Emitter<TodoState> emit,
+  ) async {
+    final currentState = state;
+    emit(TodoSubmitLoading());
+    if (currentState is TodosLoaded) {
+      List<Todo> allTodos = List<Todo>.from(currentState.todos);
+      try {
+        await _todoRepository.deleteTodo(event.todo.id!);
+        allTodos = allTodos.where((todo) => todo.id != event.todo.id).toList();
+        emit(const TodoSucces('Tarea eliminada con éxito'));
         emit(TodosLoaded(allTodos));
       } catch (e) {
         emit(TodosError(e.toString()));

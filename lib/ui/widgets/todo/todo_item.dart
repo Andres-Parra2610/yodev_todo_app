@@ -27,7 +27,26 @@ class TodoItem extends StatelessWidget {
               );
               break;
             case TodoPopUpEnum.delete:
-              // Código para eliminar
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Eliminar tarea'),
+                  content: const Text('¿Estás seguro de eliminar esta tarea?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(),
+                      child: const Text('Cancelar'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        context.read<TodoBloc>().add(DeleteTodo(todo));
+                        Navigator.of(context).pop();
+                      },
+                      child: const Text('Eliminar'),
+                    ),
+                  ],
+                ),
+              );
               break;
           }
         },

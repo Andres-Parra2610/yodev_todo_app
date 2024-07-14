@@ -32,6 +32,8 @@ class _TodoFormState extends State<TodoForm> {
   @override
   void initState() {
     super.initState();
+
+    // Update values is todo is not null
     if (widget.todo == null) return;
     _priority = widget.todo?.priority;
     _dateTime = widget.todo?.estimatedDate;
@@ -43,6 +45,7 @@ class _TodoFormState extends State<TodoForm> {
   void _onSubmit() {
     if (!_formKey.currentState!.validate()) return;
 
+    // If todo is null, create a new one else update the existing one
     if (widget.todo == null) {
       final todo = Todo(
         title: _titleController.text,
