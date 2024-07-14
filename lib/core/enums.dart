@@ -1,25 +1,27 @@
-enum TodoPriority { low, medium, high }
+enum TodoPriorityEnum { low, medium, high }
 
-extension TodoPriorityExtension on TodoPriority {
+enum TodoPopUpEnum { edit, delete }
+
+extension TodoPriorityExtension on TodoPriorityEnum {
   String get displayName {
     switch (this) {
-      case TodoPriority.low:
+      case TodoPriorityEnum.low:
         return 'Baja';
-      case TodoPriority.medium:
+      case TodoPriorityEnum.medium:
         return 'Media';
-      case TodoPriority.high:
+      case TodoPriorityEnum.high:
         return 'Alta';
     }
   }
 
-  static TodoPriority fromString(String priority) {
+  static TodoPriorityEnum fromString(String priority) {
     switch (priority.toLowerCase()) {
       case 'baja':
-        return TodoPriority.low;
+        return TodoPriorityEnum.low;
       case 'media':
-        return TodoPriority.medium;
+        return TodoPriorityEnum.medium;
       case 'alta':
-        return TodoPriority.high;
+        return TodoPriorityEnum.high;
       default:
         throw FormatException('Unknown priority level: $priority');
     }

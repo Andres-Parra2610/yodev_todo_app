@@ -5,7 +5,7 @@ import 'package:yodev_test/core/enums.dart';
 class Todo {
   final String? id;
   final String title;
-  final TodoPriority priority;
+  final TodoPriorityEnum priority;
   final String? description;
   final DateTime? estimatedDate;
   final bool isDone;
@@ -49,7 +49,7 @@ class Todo {
   Todo copyWith({
     String? id,
     String? title,
-    TodoPriority? priority,
+    TodoPriorityEnum? priority,
     String? description,
     DateTime? estimatedDate,
     bool? isDone,

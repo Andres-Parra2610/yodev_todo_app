@@ -23,7 +23,7 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
   final _descriptionController = TextEditingController();
 
   // Values
-  TodoPriority? _priority;
+  TodoPriorityEnum? _priority;
   DateTime? _dateTime;
 
   // On submit method
@@ -51,10 +51,10 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
             validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
           ),
           const SizedBox(height: 20),
-          YDInputDropdown<TodoPriority>(
+          YDInputDropdown<TodoPriorityEnum>(
             label: 'Prioridad',
             required: true,
-            items: TodoPriority.values
+            items: TodoPriorityEnum.values
                 .map(
                   (el) => DropdownMenuItem(
                     value: el,

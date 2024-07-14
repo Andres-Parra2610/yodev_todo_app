@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
+import 'package:yodev_test/core/enums.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 
 class TodoItem extends StatelessWidget {
@@ -13,6 +14,29 @@ class TodoItem extends StatelessWidget {
     return CheckboxListTile(
       title: Text(todo.title),
       subtitle: Text(todo.dateString ?? 'Sin fecha'),
+      secondary: PopupMenuButton<TodoPopUpEnum>(
+        icon: const Icon(Icons.more_vert),
+        onSelected: (TodoPopUpEnum result) {
+          switch (result) {
+            case TodoPopUpEnum.edit:
+              // Código para editar
+              break;
+            case TodoPopUpEnum.delete:
+              // Código para eliminar
+              break;
+          }
+        },
+        itemBuilder: (context) => [
+          const PopupMenuItem(
+            value: TodoPopUpEnum.edit,
+            child: Text('Editar'),
+          ),
+          const PopupMenuItem(
+            value: TodoPopUpEnum.delete,
+            child: Text('Eliminar'),
+          ),
+        ],
+      ),
       checkColor: todo.isDone
           ? Theme.of(context).colorScheme.onSurface
           : Colors.transparent,
