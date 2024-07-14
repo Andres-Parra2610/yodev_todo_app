@@ -4,6 +4,7 @@ import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
 import 'package:yodev_test/core/enums.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 import 'package:yodev_test/ui/screens/add_todo_screen.dart';
+import 'package:yodev_test/ui/widgets/todo/todo_priority_burble.dart';
 
 class TodoItem extends StatelessWidget {
   const TodoItem({super.key, required this.todo});
@@ -13,7 +14,13 @@ class TodoItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CheckboxListTile(
-      title: Text(todo.title),
+      title: Row(
+        children: [
+          TodoPriorityBurble(priority: todo.priority),
+          const SizedBox(width: 10),
+          Text(todo.title),
+        ],
+      ),
       subtitle: Text(todo.dateString ?? 'Sin fecha'),
       secondary: PopupMenuButton<TodoPopUpEnum>(
         icon: const Icon(Icons.more_vert),

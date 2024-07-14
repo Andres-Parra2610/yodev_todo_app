@@ -6,6 +6,7 @@ import 'package:yodev_test/domain/models/todo.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/input_dropdown.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_input_date.dart';
+import 'package:yodev_test/ui/widgets/todo/todo_priority_burble.dart';
 
 class TodoForm extends StatefulWidget {
   const TodoForm({
@@ -85,9 +86,14 @@ class _TodoFormState extends State<TodoForm> {
             items: TodoPriorityEnum.values
                 .map(
                   (el) => DropdownMenuItem(
-                    value: el,
-                    child: Text(el.displayName),
-                  ),
+                      value: el,
+                      child: Row(
+                        children: [
+                          TodoPriorityBurble(priority: el),
+                          const SizedBox(width: 10),
+                          Text(el.displayName),
+                        ],
+                      )),
                 )
                 .toList(),
             onChanged: (value) => _priority = value,

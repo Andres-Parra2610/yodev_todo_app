@@ -13,7 +13,7 @@ void main() async {
   await initializeDateFormatting('es_ES', null);
   final db = FirebaseFirestore.instance;
 
-  //Bloc.observer = AppBlocObserver();
+  Bloc.observer = AppBlocObserver();
   runApp(
     RepositoryProvider(
       create: (context) => FirebaseTodoRepository(db: db),

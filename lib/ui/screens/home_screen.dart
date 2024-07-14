@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:yodev_test/ui/screens/add_todo_screen.dart';
 import 'package:yodev_test/ui/widgets/globals/buttons/floating_button.dart';
-import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 import 'package:yodev_test/ui/widgets/todo/todo_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -14,20 +13,10 @@ class HomeScreen extends StatelessWidget {
         title: const Text('Lista de tareas'),
         centerTitle: false,
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            children: [
-              YDTextField(
-                borderRadius: BorderRadius.circular(50),
-                label: 'Buscar tarea...',
-                suffixIcon: const Icon(Icons.search),
-              ),
-              const SizedBox(height: 10),
-              const TodoList(),
-            ],
-          ),
+          padding: EdgeInsets.all(15),
+          child: TodoList(),
         ),
       ),
       floatingActionButton: YDFloatingButton(
