@@ -29,6 +29,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       emit(TodosLoaded(todos));
     } catch (e) {
       emit(TodosError(e.toString()));
+      emit(const TodosLoaded([]));
     }
   }
 
@@ -37,12 +38,18 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     Emitter<TodoState> emit,
   ) async {
     final currentState = state;
+    emit(TodoAddLoading());
     if (currentState is TodosLoaded) {
-      final updatedTodos = List<Todo>.from(currentState.todos);
-
-      emit(TodosLoaded(updatedTodos));
-    } else {
-      emit(const TodosError('Error adding todo'));
+      final allTodos = List<Todo>.from(currentState.todos);
+      try {
+        final newTodo = await _todoRepository.addTodo(event.todo);
+        emit(const TodoSucces('Tarea añadida con éxito'));
+        emit(TodosLoaded(allTodos..add(newTodo)));
+      } catch (e) {
+        emit(TodosError(e.toString()));
+        emit(TodosLoaded(allTodos));
+        return;
+      }
     }
   }
 }

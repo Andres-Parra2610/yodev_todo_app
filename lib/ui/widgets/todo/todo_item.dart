@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:yodev_test/core/enums.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 
 class TodoItem extends StatelessWidget {
@@ -10,7 +11,7 @@ class TodoItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return CheckboxListTile(
       title: Text(todo.title),
-      subtitle: Text('Prioridad: ${todo.priority}'),
+      subtitle: Text('Prioridad: ${todo.priority.displayName}'),
       checkColor:
           true ? Theme.of(context).colorScheme.onSurface : Colors.transparent,
       side: WidgetStateBorderSide.resolveWith(

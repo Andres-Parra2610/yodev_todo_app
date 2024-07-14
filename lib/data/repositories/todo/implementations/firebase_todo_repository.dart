@@ -13,7 +13,7 @@ class FirebaseTodoRepository implements ITodoRepository {
       final newTodo = await _db.collection('todos').add(todo.toJson());
       return todo.copyWith(id: newTodo.id);
     } catch (e) {
-      throw Exception('Error adding todo, try again');
+      throw Exception('Error agregando la tarea, inténtalo de nuevo');
     }
   }
 
@@ -22,7 +22,7 @@ class FirebaseTodoRepository implements ITodoRepository {
     try {
       await _db.collection('todos').doc(id).delete();
     } catch (e) {
-      throw Exception('Error deleting todo, try again');
+      throw Exception('Error eliminando latarea, inténtalo de nuevo');
     }
   }
 
@@ -39,7 +39,7 @@ class FirebaseTodoRepository implements ITodoRepository {
         return todos;
       });
     } catch (e) {
-      throw Exception('Error getting todos, try again');
+      throw Exception('Error obteniendo las tareas, inténtalo de nuevo');
     }
   }
 
@@ -48,7 +48,7 @@ class FirebaseTodoRepository implements ITodoRepository {
     try {
       _db.collection('todos').doc(todo.id).update(todo.toJson());
     } catch (e) {
-      throw Exception('Error updating todo, try again');
+      throw Exception('Error actualizando la tarea, inténtalo de nuevo');
     }
   }
 }

@@ -11,6 +11,8 @@ class TodoInitial extends TodoState {}
 
 class TodosLoading extends TodoState {}
 
+class TodoAddLoading extends TodoState {}
+
 class TodosLoaded extends TodoState {
   final List<Todo> todos;
 
@@ -18,6 +20,15 @@ class TodosLoaded extends TodoState {
 
   @override
   List<Object> get props => [todos];
+}
+
+class TodoSucces extends TodoState {
+  final String message;
+
+  const TodoSucces(this.message);
+
+  @override
+  List<Object> get props => [message];
 }
 
 class TodosError extends TodoState {

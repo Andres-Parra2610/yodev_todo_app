@@ -18,6 +18,14 @@ class TodoList extends StatelessWidget {
             ),
           );
         }
+        if (state is TodoSucces) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: Colors.green,
+              content: Text(state.message),
+            ),
+          );
+        }
       },
       builder: (context, state) {
         if (state is TodosLoading) {

@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
 class YDInputDropdown<T> extends StatefulWidget {
-  const YDInputDropdown(
-      {super.key,
-      required this.items,
-      required this.onChanged,
-      this.label,
-      this.validator,
-      this.value});
+  const YDInputDropdown({
+    super.key,
+    required this.items,
+    required this.onChanged,
+    this.label,
+    this.validator,
+    this.value,
+    this.required,
+  });
 
   final List<DropdownMenuItem<T>> items;
   final void Function(T?)? onChanged;
   final String? label;
   final String? Function(T?)? validator;
   final T? value;
+  final bool? required;
 
   @override
   State<YDInputDropdown<T>> createState() => _YDInputDropdownState<T>();
@@ -45,7 +48,7 @@ class _YDInputDropdownState<T> extends State<YDInputDropdown<T>> {
       },
       validator: widget.validator,
       decoration: InputDecoration(
-        labelText: widget.label,
+        label: Text('${widget.label}' '${widget.required == true ? ' *' : ''}'),
         //hintText: widget.hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),

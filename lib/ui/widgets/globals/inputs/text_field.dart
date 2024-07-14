@@ -11,6 +11,7 @@ class YDTextField extends StatelessWidget {
     this.controller,
     this.onTap,
     this.validator,
+    this.required,
   });
 
   final BorderRadius? borderRadius;
@@ -21,6 +22,7 @@ class YDTextField extends StatelessWidget {
   final TextEditingController? controller;
   final void Function()? onTap;
   final String? Function(String?)? validator;
+  final bool? required;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,7 @@ class YDTextField extends StatelessWidget {
         ),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-        labelText: label,
+        label: Text('$label' '${required == true ? ' *' : ''}'),
         alignLabelWithHint: true,
         suffixIcon: suffixIcon,
       ),

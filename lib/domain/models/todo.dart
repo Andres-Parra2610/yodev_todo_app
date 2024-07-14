@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yodev_test/core/enums.dart';
 
 class Todo {
   final String? id;
   final String title;
-  final String priority;
+  final TodoPriority priority;
   final String? description;
   final DateTime? estimatedDate;
   final bool isDone;
@@ -20,7 +21,7 @@ class Todo {
   factory Todo.fromJson(Map<String, dynamic> json) {
     return Todo(
       title: json['title'] as String,
-      priority: json['priority'] as String,
+      priority: TodoPriorityExtension.fromString(json['priority'] as String),
       description: json['description'] as String?,
       estimatedDate: json['estimatedDate'] != null
           ? (json['estimatedDate'] as Timestamp).toDate()
@@ -31,11 +32,11 @@ class Todo {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'title': title,
-      'priority': priority,
+      'priority': priority.displayName,
       'description': description,
-      'estimatedDate': estimatedDate?.toIso8601String(),
+      'estimatedDate':
+          estimatedDate != null ? Timestamp.fromDate(estimatedDate!) : null,
       'isDone': isDone,
     };
   }
@@ -43,7 +44,7 @@ class Todo {
   Todo copyWith({
     String? id,
     String? title,
-    String? priority,
+    TodoPriority? priority,
     String? description,
     DateTime? estimatedDate,
     bool? isDone,

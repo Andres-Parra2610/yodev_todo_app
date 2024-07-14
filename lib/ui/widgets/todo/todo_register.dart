@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:yodev_test/blocs/bloc/todo_bloc_bloc.dart';
+import 'package:yodev_test/core/enums.dart';
+import 'package:yodev_test/domain/models/todo.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/input_dropdown.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_input_date.dart';
@@ -13,14 +17,25 @@ class TodoRegisterForm extends StatefulWidget {
 }
 
 class _TodoRegisterFormState extends State<TodoRegisterForm> {
+  // Cpntrollers
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _priorityController = TextEditingController();
+  final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
 
+  // Values
+  TodoPriority? _priority;
+  DateTime? _dateTime;
+
+  // On submit method
   void _onSubmit() {
     if (!_formKey.currentState!.validate()) return;
-    print('Form submitted');
+    final todo = Todo(
+      title: _titleController.text,
+      priority: _priority!,
+      estimatedDate: _dateTime,
+      description: _descriptionController.text,
+    );
+    context.read<TodoBloc>().add(AddTodo(todo));
   }
 
   @override
@@ -30,46 +45,53 @@ class _TodoRegisterFormState extends State<TodoRegisterForm> {
       child: Column(
         children: [
           YDTextField(
+            required: true,
             label: 'Nombre de la tarea',
-            controller: _nameController,
+            controller: _titleController,
             validator: (value) => value!.isEmpty ? 'Campo requerido' : null,
+          ),
+          const SizedBox(height: 20),
+          YDInputDropdown<TodoPriority>(
+            label: 'Prioridad',
+            required: true,
+            items: TodoPriority.values
+                .map(
+                  (el) => DropdownMenuItem(
+                    value: el,
+                    child: Text(el.displayName),
+                  ),
+                )
+                .toList(),
+            onChanged: (value) => _priority = value,
+            validator: (value) => value == null ? 'Campo requerido' : null,
           ),
           const SizedBox(height: 20),
           YDTextInputDate(
             label: 'Fecha estimada de finalización',
-            onChanged: (value) {
-              print(value);
-            },
+            onChanged: (value) => _dateTime = value,
           ),
           const SizedBox(height: 20),
-          YDInputDropdown<String>(
-              label: 'Prioridad',
-              items: const [
-                DropdownMenuItem(
-                  value: '1',
-                  child: Text('Alta'),
-                ),
-                DropdownMenuItem(
-                  value: '2',
-                  child: Text('Media'),
-                ),
-                DropdownMenuItem(
-                  value: '3',
-                  child: Text('Baja'),
-                ),
-              ],
-              onChanged: (p0) {
-                print(p0);
-              }),
-          const SizedBox(height: 20),
-          const YDTextField(
+          YDTextField(
             label: 'Descripción de la tarea',
             maxLines: 5,
+            controller: _descriptionController,
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: _onSubmit,
-            child: const Text('Añadir'),
+          BlocConsumer<TodoBloc, TodoState>(
+            listener: (context, state) {
+              if (state is TodoSucces) {
+                Navigator.of(context).pop();
+              }
+            },
+            builder: (context, state) {
+              if (state is TodoAddLoading) {
+                return const CircularProgressIndicator();
+              }
+              return ElevatedButton(
+                onPressed: _onSubmit,
+                child: const Text('Añadir'),
+              );
+            },
           ),
         ],
       ),
