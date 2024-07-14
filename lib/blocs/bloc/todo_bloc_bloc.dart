@@ -1,13 +1,17 @@
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:yodev_test/data/repositories/todo/todo_repository.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 
 part 'todo_bloc_event.dart';
 part 'todo_bloc_state.dart';
 
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
-  TodoBloc() : super(TodoInitial()) {
+  final ITodoRepository _todoRepository;
+
+  TodoBloc({required ITodoRepository todoRepository})
+      : _todoRepository = todoRepository,
+        super(TodoInitial()) {
     on<LoadTodos>(_onLoadTodos);
     on<AddTodo>(_onAddTodo);
   }
@@ -16,60 +20,16 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     LoadTodos event,
     Emitter<TodoState> emit,
   ) async {
-    final db = FirebaseFirestore.instance;
-
-    await db.collection('todos').get().then((event) {
-      for (var doc in event.docs) {
-        print("${doc.id} => ${doc.data()}");
-      }
-    });
-
     emit(TodosLoading());
-    await Future.delayed(const Duration(seconds: 2));
-    final todos = [
-      Todo(
-        id: '1',
-        title: 'Tarea 1',
-        priority: 1,
-        description: 'Descripción de la tarea 1',
-        estimatedDate: DateTime.now().add(const Duration(days: 1)),
-        isDone: false,
-      ),
-      Todo(
-        id: '2',
-        title: 'Tarea 2',
-        priority: 2,
-        description: 'Descripción de la tarea 2',
-        estimatedDate: DateTime.now().add(const Duration(days: 2)),
-        isDone: false,
-      ),
-      Todo(
-        id: '3',
-        title: 'Tarea 3',
-        priority: 3,
-        description: 'Descripción de la tarea 3',
-        estimatedDate: DateTime.now().add(const Duration(days: 3)),
-        isDone: false,
-      ),
-      Todo(
-        id: '4',
-        title: 'Tarea 4',
-        priority: 1,
-        description: 'Descripción de la tarea 4',
-        estimatedDate: DateTime.now().add(const Duration(days: 4)),
-        isDone: false,
-      ),
-      Todo(
-        id: '5',
-        title: 'Tarea 5',
-        priority: 2,
-        description: 'Descripción de la tarea 5',
-        estimatedDate: DateTime.now().add(const Duration(days: 5)),
-        isDone: false,
-      ),
-    ];
+    try {
+      final todos = await _todoRepository.getTodos();
 
-    emit(TodosLoaded(todos));
+      if (todos == null) return;
+
+      emit(TodosLoaded(todos));
+    } catch (e) {
+      emit(TodosError(e.toString()));
+    }
   }
 
   Future<void> _onAddTodo(
@@ -78,17 +38,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
   ) async {
     final currentState = state;
     if (currentState is TodosLoaded) {
-      final updatedTodos = List<Todo>.from(currentState.todos)
-        ..add(
-          Todo(
-            id: '6',
-            title: 'Nueva tarea',
-            priority: 1,
-            description: 'Descripción de la tarea',
-            estimatedDate: DateTime.now().add(const Duration(days: 6)),
-            isDone: false,
-          ),
-        );
+      final updatedTodos = List<Todo>.from(currentState.todos);
 
       emit(TodosLoaded(updatedTodos));
     } else {

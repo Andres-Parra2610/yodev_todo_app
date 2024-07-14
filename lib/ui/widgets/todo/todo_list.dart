@@ -8,31 +8,36 @@ class TodoList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TodoBloc, TodoState>(
-      builder: (context, state) {
-        if (state is TodoInitial) {
-          return const SizedBox();
+    return BlocConsumer<TodoBloc, TodoState>(
+      listener: (context, state) {
+        if (state is TodosError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: const Color.fromARGB(255, 126, 35, 28),
+              content: Text(state.message),
+            ),
+          );
         }
-
+      },
+      builder: (context, state) {
         if (state is TodosLoading) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        if (state is TodosError) {
-          return Center(child: Text(state.message));
+        if (state is TodosLoaded) {
+          final todos = state.todos;
+          return ListView.builder(
+            physics: const NeverScrollableScrollPhysics(),
+            shrinkWrap: true,
+            itemCount: todos.length,
+            itemBuilder: (context, index) {
+              final todo = todos[index];
+              return TodoItem(todo: todo);
+            },
+          );
         }
 
-        final todos = (state as TodosLoaded).todos;
-
-        return ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          shrinkWrap: true,
-          itemCount: todos.length,
-          itemBuilder: (context, index) {
-            final todo = todos[index];
-            return TodoItem(todo: todo);
-          },
-        );
+        return const SizedBox();
       },
     );
   }
