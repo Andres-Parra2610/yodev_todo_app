@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:yodev_test/domain/models/todo.dart';
 
@@ -15,6 +16,14 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     LoadTodos event,
     Emitter<TodoState> emit,
   ) async {
+    final db = FirebaseFirestore.instance;
+
+    await db.collection('todos').get().then((event) {
+      for (var doc in event.docs) {
+        print("${doc.id} => ${doc.data()}");
+      }
+    });
+
     emit(TodosLoading());
     await Future.delayed(const Duration(seconds: 2));
     final todos = [
