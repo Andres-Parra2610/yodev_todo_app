@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:yodev_test/ui/screens/add_todo_screen.dart';
 import 'package:yodev_test/ui/widgets/globals/buttons/floating_button.dart';
+import 'package:yodev_test/ui/widgets/todo/todo_filter_done.dart';
 import 'package:yodev_test/ui/widgets/todo/todo_list.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -16,7 +17,13 @@ class HomeScreen extends StatelessWidget {
       body: const SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(15),
-          child: TodoList(),
+          child: Column(
+            children: [
+              TodoFilterDone(),
+              SizedBox(height: 20),
+              TodoList(),
+            ],
+          ),
         ),
       ),
       floatingActionButton: YDFloatingButton(

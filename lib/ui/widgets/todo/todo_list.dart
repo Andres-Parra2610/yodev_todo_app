@@ -33,7 +33,7 @@ class TodoList extends StatelessWidget {
         }
 
         if (state is TodosLoaded) {
-          final todos = state.todos;
+          final todos = state.filteredTodos;
 
           if (todos.isEmpty)
             return const Center(child: Text('No hay tareas registradas'));

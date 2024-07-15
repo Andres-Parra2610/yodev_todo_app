@@ -15,20 +15,12 @@ class TodoSubmitLoading extends TodoState {}
 
 class TodosLoaded extends TodoState {
   final List<Todo> todos;
+  final List<Todo> filteredTodos;
 
-  const TodosLoaded(this.todos);
-
-  @override
-  List<Object> get props => [todos];
-}
-
-class TodosFiltered extends TodoState {
-  final List<Todo> todos;
-
-  const TodosFiltered(this.todos);
+  const TodosLoaded(this.todos, this.filteredTodos);
 
   @override
-  List<Object> get props => [todos];
+  List<Object> get props => [todos, filteredTodos];
 }
 
 class TodoSucces extends TodoState {
