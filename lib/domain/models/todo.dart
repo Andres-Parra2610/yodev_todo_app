@@ -2,12 +2,24 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:yodev_test/core/enums.dart';
 
+/// This class represents a todo
 class Todo {
+  /// [String] The id of the todo (optional) used for updating and deleting
   final String? id;
+
+  /// [String] The title of the todo (required)
   final String title;
+
+  /// [TodoPriorityEnum] The priority of the todo (required), can be low, medium or high
   final TodoPriorityEnum priority;
+
+  /// [String] The description of the todo (optional)
   final String? description;
+
+  /// [DateTime] The estimated date of the todo (optional)
   final DateTime? estimatedDate;
+
+  /// [bool] If the todo is done or not (required)
   final bool isDone;
 
   String? get dateString => estimatedDate != null

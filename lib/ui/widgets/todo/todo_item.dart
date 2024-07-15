@@ -18,7 +18,11 @@ class TodoItem extends StatelessWidget {
         children: [
           TodoPriorityBurble(priority: todo.priority),
           const SizedBox(width: 10),
-          Text(todo.title),
+          Flexible(
+            child: Text(todo.title,
+                overflow:
+                    TextOverflow.ellipsis), // Agrega ellipsis al desbordamiento
+          ),
         ],
       ),
       subtitle: Text(todo.dateString ?? 'Sin fecha'),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:yodev_test/core/helpers.dart';
 import 'package:yodev_test/ui/widgets/globals/inputs/text_field.dart';
 
 class YDTextInputDate extends StatelessWidget {
@@ -11,7 +11,7 @@ class YDTextInputDate extends StatelessWidget {
     this.initValue,
   }) {
     if (initValue != null) {
-      _dateController.text = DateFormat('dd/MM/yyyy').format(initValue!);
+      _dateController.text = getDateString(initValue);
     }
   }
 
@@ -38,7 +38,7 @@ class YDTextInputDate extends StatelessWidget {
 
           if (date == null) return;
 
-          String dateFormat = DateFormat('dd/MM/yyyy').format(date);
+          String dateFormat = getDateString(date);
           _dateController.text = dateFormat;
           onChanged?.call(date);
         },

@@ -10,6 +10,11 @@ import 'package:yodev_test/domain/models/todo.dart';
 part 'todo_bloc_event.dart';
 part 'todo_bloc_state.dart';
 
+/// The TodoBloc is the main bloc of the app
+/// It is responsible for managing the todos
+/// It has a filter cubit to manage the filter, in this case, the [TodoFilterCubit]
+/// It has a repository [ITodoRepository] to interact with the database in this case, the [FirebaseTodoRepository]
+
 class TodoBloc extends Bloc<TodoEvent, TodoState> {
   final ITodoRepository _todoRepository;
   final TodoFilterCubit _todoFilterCubit;
@@ -28,11 +33,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     on<DeleteTodo>(_onDeleteTodo);
     on<FilterTodos>(_onFilterTodos);
 
+    /// Listen to the filter changes
     _filterSubscription = _todoFilterCubit.stream.listen((filter) {
       add(FilterTodos(filter));
     });
   }
 
+  /// This method is responsible for loading the todos from the repository
   Future<void> _onLoadTodos(
     LoadTodos event,
     Emitter<TodoState> emit,
@@ -50,6 +57,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     }
   }
 
+  /// This method is responsible for adding a new todo to the repository
   Future<void> _onAddTodo(
     AddTodo event,
     Emitter<TodoState> emit,
@@ -62,8 +70,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         final newTodo = await _todoRepository.addTodo(event.todo);
         emit(const TodoSucces('Tarea añadida con éxito'));
         _todoFilterCubit.changeFilter(TodoFilterEnum.all);
-        emit(TodosLoaded(allTodos..add(newTodo),
-            _applyCurrentFilter(allTodos..add(newTodo))));
+        emit(TodosLoaded(allTodos..add(newTodo), allTodos));
       } catch (e) {
         emit(TodosError(e.toString()));
         emit(TodosLoaded(allTodos, allTodos));
@@ -72,6 +79,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     }
   }
 
+  /// This method is responsible for updating a todo in the repository
   Future<void> _onUpdateTodo(
     UpdateTodo event,
     Emitter<TodoState> emit,
@@ -95,6 +103,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     }
   }
 
+  /// This method is responsible for deleting a todo from the repository
   Future<void> _onDeleteTodo(
     DeleteTodo event,
     Emitter<TodoState> emit,
@@ -114,6 +123,7 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
     }
   }
 
+  /// This method is responsible for filtering the todos
   Future<void> _onFilterTodos(
     FilterTodos event,
     Emitter<TodoState> emit,
