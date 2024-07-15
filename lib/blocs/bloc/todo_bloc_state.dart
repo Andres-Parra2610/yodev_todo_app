@@ -22,6 +22,15 @@ class TodosLoaded extends TodoState {
   List<Object> get props => [todos];
 }
 
+class TodosFiltered extends TodoState {
+  final List<Todo> todos;
+
+  const TodosFiltered(this.todos);
+
+  @override
+  List<Object> get props => [todos];
+}
+
 class TodoSucces extends TodoState {
   final String message;
 

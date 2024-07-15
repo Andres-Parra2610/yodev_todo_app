@@ -2,6 +2,8 @@ enum TodoPriorityEnum { low, medium, high }
 
 enum TodoPopUpEnum { edit, delete }
 
+enum TodoFilterEnum { all, done, undone }
+
 extension TodoPriorityExtension on TodoPriorityEnum {
   String get displayName {
     switch (this) {
